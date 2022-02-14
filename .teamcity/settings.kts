@@ -25,10 +25,15 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2019.2"
 
 fun ProjectFeatures.addGraphs(buildTypeList : List<BuildType>) {
+
     buildTypeList.forEach {
+
         feature {
+
             type = "project-graphs"
+
             param(
+
                 "series", """
                     [
                       {
@@ -45,16 +50,27 @@ fun ProjectFeatures.addGraphs(buildTypeList : List<BuildType>) {
                       }
                     ]
                 """.trimIndent()
+
             )
+
             param("format", "duration")
+
             param("hideFilters", "")
+
             param("title", "Time spent overall ${it.name}")
+
             param("defaultFilters", "showFailed")
+
             param("seriesTitle", "Serie")
+
         }
+
         feature {
+
             type = "project-graphs"
+
             param(
+
                 "series", """
                     [
                       {
@@ -65,43 +81,132 @@ fun ProjectFeatures.addGraphs(buildTypeList : List<BuildType>) {
                       }
                     ]
                 """.trimIndent()
+
             )
+
             param("format", "percentBy1")
+
             param("hideFilters", "")
+
             param("title", "Success Rate for ${it.name}")
+
             param("defaultFilters", "showFailed, averaged")
+
             param("seriesTitle", "Serie")
+
         }
+
     }
+
     feature {
+
         type = "buildtype-graphs"
+
         param(
+
             "series", """
                     [
                       {
                         "type": "valueTypes",
-                        "pattern": "buildStageDuration:*",
-                        "title": "Stage: {1}"
-                      }
+                        "pattern": "buildStageDuration:*"
+                         }
                     ]
             """.trimIndent()
+
         )
+
         param("format", "duration")
+
         param("hideFilters", "")
+
         param("title", "Time per step")
+
         param("defaultFilters", "showFailed")
+
         param("seriesTitle", "Serie")
+
     }
+
 }
+
+
+
+version = "2021.1"
+
+
 
 project {
 
-    buildType(Spljar)
+
+
+    buildType(Buildconfig1)
+
+    buildType(Secondaconfig1)
+
+    val buildChain = sequential  {
+
+      buildType(Buildconfig1)
+
+      buildType(Secondaconfig1)
+
+    }
+
     features {
+
     addGraphs(buildChain.buildTypes())
-}
+
+    }
+
 }
 
-object Spljar : BuildType({
-    name = "spljar2"
+
+
+object Buildconfig1 : BuildType({
+
+    name = "buildconfig"
+
+
+
+    steps {
+
+        script {
+
+            scriptContent = "echo a"
+
+        }
+
+    }
+
 })
+
+
+
+object Secondaconfig1 : BuildType({
+
+    name = "Secondaconfig"
+
+
+
+ steps {
+
+        script {
+
+            name = "step1"
+
+            scriptContent = "echo a"
+
+        }
+
+        script {
+
+            name = "step2"
+
+            scriptContent = "echo a"
+
+        }
+
+    }
+
+})
+
+
