@@ -30,5 +30,5 @@ project {
 }
 
 object Spljar : BuildType({
-    name = "spljar"
+    name = "spljar2"
 })
